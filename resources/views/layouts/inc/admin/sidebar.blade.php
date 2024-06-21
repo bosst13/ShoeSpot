@@ -33,7 +33,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('brands.index') }}">
+            <a class="nav-link" href="/brands">
                 <i class="mdi mdi-tag menu-icon"></i>
                 <span class="menu-title">Brand</span>
             </a>

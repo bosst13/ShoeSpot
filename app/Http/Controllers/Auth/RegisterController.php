@@ -82,7 +82,6 @@ class RegisterController extends Controller
     $customer = new \App\Models\Customer();
     $customer->user_id = $user->id;
     $customer->customer_name = $data['name'];
-    $customer->email = $data['email'];
     $customer->save();
 
 

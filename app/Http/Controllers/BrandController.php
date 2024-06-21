@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BrandController extends Controller
 {
@@ -13,7 +14,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-         return view('admin.brands.index', compact('brands'));
+         return response()->json($brands);
     }
 
     /**
@@ -28,32 +29,37 @@ class BrandController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'status' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+{
+    // Validate incoming request data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+    ]);
 
-        $brand = new Brand;
-        $brand->name = $request->brand_name;
-        $brand->status = $request->status;
+    // Create a new Brand instance
+    $brand = new Brand();
+    $brand->name = $validatedData['name'];
 
-        // Set the default image path or null if no image is provided
-        if ($request->hasFile('images')) {
-            $file = $request->file('images')[0];
-            $ext = $file->getClientOriginalExtension();
-            $filename = time() .'.'. $ext;
+    // Handle file upload if applicable
+    if ($request->hasFile('images')) {
+        $files = $request->file('images');
+        $brand->images = 'storage/images/' . $files->getClientOriginalName();
 
-            $file->move('uploads/image',$filename);
-            $brand->images = $filename;
-        }
-
-        $brand->save();
-
-        return redirect()->back()->with('success', 'Product added successfully.');
+        // Move the uploaded file to a directory within public storage (e.g., uploads/images)
+        Storage::put('public/images/' . $files->getClientOriginalName(), file_get_contents($files));
     }
+
+    // Save the brand record
+    $brand->save();
+
+    // Return a JSON response indicating success
+    return response()->json([
+        'message' => 'Brand created successfully',
+        'brand' => $brand,
+        'status' => 200
+    ]);
+}
+
 
     /**
      * Display the specified resource.

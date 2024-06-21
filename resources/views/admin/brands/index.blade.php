@@ -1,63 +1,52 @@
+
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container">
-        <h2>Add Brand</h2>
-        <form action="{{ route('brands.store') }}" method="post" enctype="multipart/form-data">
-
-            @csrf
-            <div class="form-group">
-                <label for="brand_name">Brand Name:</label>
-                <input type="text" class="form-control" id="brand_name" name="brand_name">
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status">
-                    <option value="in stock">In Stock</option>
-                    <option value="not available">Not Available</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="images">Images:</label>
-                <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Brand</button>
-        </form>
-
-        <hr>
-
-        <h2>Brands</h2>
-        <table class="table">
+<div id="items" class="container">
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#itemModal">Add<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+    <div class="card-body" style="height: 210px;">
+        <input type="text" id="itemSearch" placeholder="--search--">
+    </div>
+    <div class="table-responsive">
+        <table id="itable" class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th>Brand Name</th>
-                    <th>Status</th>
-                    <th>Images</th>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($brands as $brand)
-                    <tr>
-                        <td>{{ $brand->name }}</td>
-                        <!-- Display the category -->
-                        <td>{{ $brand->status }}</td>
-                        <td>
-                                <img src="{{ asset('uploads/image' . $brand->images) }}" alt="Product Image"
-                                    style="max-width: 100px;">
-                        </td>
-                        <td>
-                            <a href="{{ route('brands.edit', $brand->brand_id) }}" class="btn btn-primary">Edit</a>
-                            <form method="post" action="{{ route('brands.destroy', $brand->brand_id) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-
-            </tbody>
+            <tbody id="ibody"></tbody>
         </table>
     </div>
+</div>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">Create New Brand</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="iform" method="#" action="#" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="desc" class="control-label">Name</label>
+                        <input type="text" class="form-control" id="desc" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="image" class="control-label">Image</label>
+                        <input type="file" class="form-control" id="image" name="images">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="itemSubmit" type="submit" class="btn btn-primary">Save</button>
+                <button id="itemUpdate" type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
