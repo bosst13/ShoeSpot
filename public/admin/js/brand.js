@@ -36,7 +36,7 @@ $(document).ready(function () {
             {
                 data: null,
                 render: function (data, type, row) {
-                    return "<a href='#' class = 'editBtn' id='editbtn' data-id=" + data.brand_id + "><i class='fas fa-edit' aria-hidden='true' style='font-size:24px' ></i></a><a href='#'  class='deletebtn' data-id=" + data.item_id + "><i  class='fas fa-trash-alt' style='font-size:24px; color:red' ></a></i>";
+                    return "<a href='#' class = 'editBtn' id='editbtn' data-id=" + data.brand_id + "><i class='fas fa-edit' aria-hidden='true' style='font-size:24px' ></i></a><a href='#'  class='deletebtn' data-id=" + data.brand_id + "><i  class='fas fa-trash-alt' style='font-size:24px; color:red' ></a></i>";
                 }
             }
         ],
@@ -75,29 +75,27 @@ $(document).ready(function () {
     $('#itable tbody').on('click', 'a.editBtn', function (e) {
         e.preventDefault();
         $('#itemImage').remove()
-        $('#itemId').remove()
+        $('#brandId').remove()
         $("#iform").trigger("reset");
         // var id = $(e.relatedTarget).attr('data-id');
         console.log(id);
 
        
         var id = $(this).data('id');
-        $('<input>').attr({ type: 'hidden', id: 'itemId', name: 'item_id', value: id }).appendTo('#iform');
+        $('<input>').attr({ type: 'hidden', id: 'brandId', name: 'brand_id', value: id }).appendTo('#iform');
         $('#itemModal').modal('show');
         $('#itemSubmit').hide()
         $('#itemUpdate').show()
 
         $.ajax({
             type: "GET",
-            url: `http://localhost:8000/api/items/${id}`,
+            url: `http://localhost:8000/api/brand/${id}`,
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                $('#desc').val(data.description)
-                $('#sell').val(data.sell_price)
-                $('#cost').val(data.cost_price)
-                $("#iform").append(`<img src=" ${data.img_path}" width='200px', height='200px' id="itemImage"   />`)
+                $('#desc').val(data.name)
+                $("#iform").append(`<img src=" ${data.images}" width='200px', height='200px' id="itemImage"   />`)
 
             },
             error: function (error) {
@@ -108,7 +106,7 @@ $(document).ready(function () {
 
     $("#itemUpdate").on('click', function (e) {
         e.preventDefault();
-        var id = $('#itemId').val();
+        var id = $('#brandId').val();
         console.log(id);
         var table = $('#itable').DataTable();
         // var cRow = $("tr td:eq(" + id + ")").closest('tr');
@@ -123,7 +121,7 @@ $(document).ready(function () {
         // }
         $.ajax({
             type: "POST",
-            url: `http://localhost:8000/api/items/${id}`,
+            url: `http://localhost:8000/api/brand/${id}`,
             data: formData,
             contentType: false,
             processData: false,
@@ -165,7 +163,7 @@ $(document).ready(function () {
                 if (result)
                     $.ajax({
                         type: "DELETE",
-                        url: `http://localhost:8000/api/items/${id}`,
+                        url: `http://localhost:8000/api/brand/${id}`,
                         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                         dataType: "json",
                         success: function (data) {

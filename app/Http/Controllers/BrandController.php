@@ -66,7 +66,8 @@ class BrandController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $brand = Brand::where('brand_id', $id)->first();
+        return response()->json($brand);
     }
 
     /**
@@ -84,15 +85,22 @@ class BrandController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'status' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+
+        if ($request->hasFile('images')) {
+            $files = $request->file('images');
+            $brand->images = 'storage/images/' . $files->getClientOriginalName();
+            Storage::put('public/images/' . $files->getClientOriginalName(), file_get_contents($files));
+            $validatedData['images'] = 'storage/images/' . $files->getClientOriginalName();
+        }
     
         // Update the supplier with validated data
         $brand->update($validatedData);
     
         // Redirect back with success message
-        return redirect()->route('brands.index')->with('success', 'Supplier updated successfully.');
+        return response()->json(["success" => "brand updated successfully.", "brand" => $brand, "status" => 200]);
     }
 
     /**
