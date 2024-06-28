@@ -109,7 +109,7 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         $brand->delete();
-
-        return redirect()->route('brands.index')->with('success', 'Supplier deleted successfully.');
+        $data = array('success' => 'deleted', 'code' => 200);
+            return response()->json($data);
     }
 }
