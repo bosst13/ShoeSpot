@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 
-class IndivProductController extends Controller
+class StockController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::whereDoesntHave('stock')->get();
-        return response()->json($products);
+        $stocks = Stock::with('product')->get();
+        $stocks = $stocks->map(function($stock){
+            return [
+                'stock_id' => $stock->stock_id,
+                'product_id' => $stock->product_id,
+                'product_name' => $stock->product->product_name,
+                'quantity' => $stock->quantity,   
+            ];
+        });
+        return response()->json($stocks);
     }
 
     /**

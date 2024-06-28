@@ -54,12 +54,10 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
 
 Route::prefix('/brands')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::view('','admin.brands.index');
-   // Route::get('/index', [BrandController::class, 'index'])->name('brands.index');
-    // Route::get('/create', [BrandController::class, 'create'])->name('brands.create');
-    // Route::post('/store', [BrandController::class, 'store'])->name('brands.store');
-    // Route::get('/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    // Route::put('/{brand}/update', [BrandController::class, 'update'])->name('brands.update');
-    // Route::delete('/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+});
+
+Route::prefix('/stocks')->middleware(['auth', 'isAdmin'])->group(function () {
+    Route::view('','admin.stocks.index');
 });
 
 Route::prefix('/products')->group(function () {

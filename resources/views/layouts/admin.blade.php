@@ -89,6 +89,7 @@
     <script src="{{ asset('admin/js/dataTables.bootstrap4.js') }}"></script>
 
     <script src="{{ asset('admin/js/brand.js') }}"></script>
+    <script src="{{ asset('admin/js/stock.js') }}"></script>
 
 </body>
 

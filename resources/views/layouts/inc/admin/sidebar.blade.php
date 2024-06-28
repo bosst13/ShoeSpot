@@ -39,6 +39,12 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="/stocks">
+                <i class="mdi mdi-tag menu-icon"></i>
+                <span class="menu-title">Stock</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link" href="pages/icons/mdi.html">
