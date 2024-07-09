@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
          // Fetch products from the database
          $products = Product::all();
-         return view('admin.product', compact('products'));
+        return response()->json($products);
     }
 
     public function store(Request $request)

@@ -16,7 +16,6 @@ class Product extends Model
         'description',
         'sell_price',
         'cost_price'
-
     ];
 
     public function images(): HasMany

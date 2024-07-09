@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\ProductController;
+// use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\IndivProductController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::apiResource('brand', BrandController::class);
 Route::apiResource('stock', StockController::class);
+Route::apiResource('product', ProductController::class);
+Route::get('/api/brands', [ProductController::class, 'getBrands']);
+
 Route::apiResource('availableProduct', IndivProductController::class)->only(['index']);
+Route::apiResource('brands', BrandController::class)->only(['index']);

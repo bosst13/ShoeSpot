@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\BrandsImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,11 +13,18 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         $brands = Brand::all();
          return response()->json($brands);
     }
+
+    // public function getBrands()
+    // {
+    //     $brands = Brand::all(['brand_id', 'name']); // Adjust according to your database column names
+    //     return response()->json($brands);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -112,4 +121,27 @@ class BrandController extends Controller
         $data = array('success' => 'deleted', 'code' => 200);
             return response()->json($data);
     }
+
+    public function brandsImport(Request $request)
+    {
+        $request->validate([
+            'item_upload' => [
+                'required',
+                'file'
+            ],
+        ]);
+
+        try {
+            Excel::import(new BrandsImport, $request->file('item_upload'));
+            
+            // Import successful, now redirect
+            return redirect('/brands')->with('success', 'File imported successfully');
+            
+        } catch (\Exception $e) {
+            // Handle import failure, if needed
+            return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+
+    }
+
 }
